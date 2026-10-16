@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DesiChan — Indian Imageboard</title>
+<style>
+*{box-sizing:border-box}
+body{background:#FFFFEE;color:#800000;font-family:"MS PGothic","IPAMonaPGothic","Noto Sans",Arial,sans-serif;font-size:12pt;margin:0;padding:0}
+a,a:visited{color:#0000EE;text-decoration:none}
+a:hover{color:#DD0000;text-decoration:underline}
+header{border-bottom:1px solid #D9BFB7;background:#F0E0D6}
+.topbar{padding:6px 14px 4px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.logo{font:bold 20pt "Times New Roman","MS PGothic",serif;color:#800000;letter-spacing:-1.5px;text-decoration:none}
+.logo:hover{color:#800000;text-decoration:none}
+.tag{font-size:9pt;color:#800000}
+.boardbar{padding:3px 14px 6px;font-size:9pt;line-height:1.9;background:#FFFDF5;border-top:1px solid #EAD5CB}
+.boardbar a{color:#800000;padding:0 2px}
+.boardbar a:hover{color:#DD0000;text-decoration:none}
+main{max-width:980px;margin:0 auto;padding:12px 14px 0}
+hr{border:0;border-top:1px solid #800000;margin:12px 0}
+.home{max-width:760px;margin:0 auto;padding:10px 0 0;text-align:center}
+.home h1{font:bold 32pt "Times New Roman","MS PGothic",serif;color:#800000;letter-spacing:-2px;margin:18px 0 4px;line-height:1}
+.home .home-sub{font-size:10pt;color:#800000;margin:0 0 6px}
+.home .home-tagline{font-size:10pt;color:#800000;margin:0 0 14px}
+.home hr{margin:10px auto;max-width:520px}
+.home-stats{font-size:9pt;color:#996666;margin:8px 0 14px}
+.cat{text-align:left;margin:0 auto 14px;max-width:680px}
+.cat h2{font:bold 12pt "MS PGothic",Arial,sans-serif;color:#800000;background:#F0E0D6;border:1px solid #D9BFB7;padding:3px 8px;margin:0 0 4px}
+.cat ul{list-style:none;margin:0;padding:0;columns:2;column-gap:24px}
+.cat li{font-size:10pt;padding:1px 0;break-inside:avoid;line-height:1.5}
+.cat li b{color:#CC1105;font-weight:bold}
+.cat li a{color:#0000EE;font-weight:bold}
+.cat li .cdesc{color:#800000;font-size:9pt}
+.home-nav{font-size:10pt;margin:18px 0 8px;color:#800000}
+.home-nav a{color:#800000}
+.boardhead{text-align:center;margin:10px 0 4px}
+.boardhead h1{font:bold 22pt "Times New Roman","MS PGothic",serif;color:#800000;margin:0;letter-spacing:-1.5px}
+.boardhead p{font-size:10pt;margin:3px 0 0;color:#800000}
+.boardhead .crumb{font-size:9pt;color:#996666;margin-bottom:6px}
+.boardhead .crumb a{color:#800000}
+form table{border-collapse:separate;border-spacing:2px;margin:0 auto}
+form table th{background:#EEAA88;color:#800000;font-weight:bold;font-size:10pt;padding:4px 10px;text-align:left;vertical-align:middle;border:1px solid #D9BFB7;white-space:nowrap}
+form table td{padding:0 2px}
+input[type=text],input[type=password],textarea,select{background:#FFF;border:1px solid #AAA;color:#000;font-size:10pt;padding:2px 4px;font-family:inherit}
+input[type=text],input[type=password]{width:280px}
+textarea{width:420px;height:110px;font-family:"MS PGothic",monospace,monospace}
+input[type=file]{font-size:9.5pt;color:#800000}
+input[type=submit],button{background:#F0E0D6;border:1px solid #800000;color:#800000;cursor:pointer;font-size:10pt;padding:3px 14px;font-family:inherit}
+input[type=submit]:hover,button:hover{background:#EEAA88}
+.thread{margin:10px 0;clear:both}
+.post.op{background:transparent;border:0;padding:0;margin-bottom:4px}
+.post.reply{background:#F0E0D6;border:1px solid #D9BFB7;border-left:0;border-top:0;margin:4px 0;padding:3px 6px;max-width:98%}
+.post.highlighted{background:#F0C0B0;border-color:#EA8;transition:background .3s}
+.post .subject{color:#CC1105;font-weight:bold;font-size:11pt}
+.post .postinfo{font-size:10pt;margin-bottom:2px}
+.post .name{color:#117743;font-weight:bold}
+.post .date{color:#800000}
+.post .pnum{color:#800000}
+.post .pnum a{color:#800000}
+.post .pid{color:#996666;font-size:9pt;margin-left:4px}
+.post .body{color:#800000;line-height:1.35;white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere}
+.post .body .quote{color:#789922}
+.post .body a{color:#0000EE}
+.post .fileinfo{font-size:9pt;margin:0 0 2px}
+.post img.attach{border:0;max-width:220px;max-height:220px;float:left;margin:3px 16px 6px 4px;cursor:pointer}
+.post.op img.attach{margin:3px 20px 6px 8px;max-width:250px}
+.qbtn{display:inline-block;font-size:8pt;line-height:1;border:1px solid #D9BFB7;background:#FFFFEE;color:#800000;padding:1px 3px;text-decoration:none;margin-left:4px;vertical-align:middle}
+.qbtn:hover{background:#EEAA88;color:#800000;text-decoration:none}
+.delbtn{display:inline-block;font-size:8pt;color:#996666;margin-left:4px;text-decoration:none}
+.delbtn:hover{color:#CC1105}
+.threadfoot{font-size:9.5pt;margin:-2px 0 12px 0}
+.threadfoot a{font-weight:bold}
+.omitted{color:#707070;font-size:9.5pt}
+.empty{border:1px dashed #D9BFB7;padding:20px;text-align:center;color:#996666;font-size:10pt;margin:12px 0;background:#FFFDF5}
+.hint{font-size:9pt;color:#996666}
+.pages{background:#F0E0D6;border:1px solid #D9BFB7;display:inline-block;font-size:9.5pt;padding:2px 10px}
+.pages a{color:#800000}
+.notice{background:#FFFDF5;border:1px solid #D9BFB7;padding:6px 10px;margin:8px auto;font-size:9pt;color:#996666;text-align:center;max-width:680px}
+.notice b{color:#CC1105}
+.admin-table{width:100%;border-collapse:collapse;font-size:9pt;margin:10px 0}
+.admin-table th,.admin-table td{border:1px solid #D9BFB7;padding:3px 6px;text-align:left}
+.admin-table th{background:#EEAA88;color:#800000}
+.admin-table tr:nth-child(even){background:#FFFDF5}
+footer{max-width:980px;margin:26px auto 44px;padding:14px;border-top:1px solid #D9BFB7;text-align:center;font-size:9pt;color:#800000}
+footer p{margin:0 0 3px}
+@media (max-width:620px){
+  body{font-size:11pt}
+  .logo{font-size:17pt}
+  main{padding:8px}
+  .home h1{font-size:24pt}
+  .cat ul{columns:1}
+  form table{width:100%}
+  form table th{font-size:9pt;padding:3px 6px}
+  input[type=text],input[type=password]{width:100%}
+  textarea{width:100%}
+  .post img.attach{max-width:150px;max-height:150px}
+  .post.op img.attach{max-width:180px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <a class="logo" href="#/">DesiChan</a>
+    <span class="tag">भारतीय इमेजबोर्ड · Indian Imageboard</span>
+  </div>
+  <nav class="boardbar" id="boardbar"></nav>
+</header>
+
+<main id="app"></main>
+
+<footer>
+  <p><b>DesiChan</b> — a small imageboard for the Indian community. No accounts, no tracking, no algorithm.</p>
+  <p id="modeinfo">Loading…</p>
+</footer>
+
+<script>
+/* =========================================================
+   BOARDS
+   ========================================================= */
+const BOARDS = [
+  { id:'desi',    icon:'🪔', name:'Desi',    cat:'Desi Life', desc:'General discussion — सामान्य चर्चा' },
+  { id:'charcha', icon:'🗳️', name:'Charcha', cat:'Desi Life', desc:'Politics & current affairs — चर्चा' },
+  { id:'safar',   icon:'🚂', name:'Safar',   cat:'Desi Life', desc:'Travel, trains, hill stations — सफ़र' },
+  { id:'food',    icon:'🍛', name:'Khana',   cat:'Desi Life', desc:'Recipes, street food, comfort food — खाना' },
+  { id:'fit',     icon:'🏋️', name:'Fit',     cat:'Desi Life', desc:'Gym, yoga, running, health' },
+  { id:'cinema',  icon:'🎬', name:'Cinema',  cat:'Entertainment', desc:'Bollywood, regional films, OTT — सिनेमा' },
+  { id:'music',   icon:'🎵', name:'Sangeet', cat:'Entertainment', desc:'Filmi, classical, indie, lo-fi — संगीत' },
+  { id:'cricket', icon:'🏏', name:'Cricket', cat:'Entertainment', desc:'Cricket, IPL, gully cricket — क्रिकेट' },
+  { id:'sports',  icon:'🏑', name:'Sports',  cat:'Entertainment', desc:'Hockey, football, kabaddi, olympics' },
+  { id:'memes',   icon:'😂', name:'Memes',   cat:'Entertainment', desc:'Memes, jokes, shitposting — मीम्स' },
+  { id:'tech',    icon:'💻', name:'Tech',    cat:'Knowledge', desc:'Software, startups, gadgets — टेक्नोलॉजी' },
+  { id:'padhai',  icon:'📚', name:'Padhai',  cat:'Knowledge', desc:'JEE / NEET / UPSC / boards — पढ़ाई' },
+  { id:'sahitya', icon:'📖', name:'Sahitya', cat:'Knowledge', desc:'Books, literature, languages — साहित्य' },
+  { id:'kala',    icon:'🎨', name:'Kala',    cat:'Knowledge', desc:'Art, design, photography — कला' },
+  { id:'gaadi',   icon:'🛺', name:'Gaadi',   cat:'Miscellaneous', desc:'Cars, bikes, autos, EVs — गाड़ी' },
+  { id:'random',  icon:'🎲', name:'Random',  cat:'Miscellaneous', desc:'Anything goes — कुछ भी' },
+];
+const CATEGORIES = ['Desi Life','Entertainment','Knowledge','Miscellaneous'];
+
+const MAX_RES = 30;
+const MAX_KB = 400;
+const RENZOKU = 5;
+
+/* =========================================================
+   STORE — server or localStorage fallback
+   ========================================================= */
+const Store = {
+  mode: 'local',
+  DB: null,
+
+  async init(){
+    try{
+      const r = await fetch('api.php?action=ping', {cache:'no-store'});
+      if(r.ok){
+        const j = await r.json();
+        if(j.ok){ this.mode = 'server'; return; }
+      }
+    }catch(e){}
+    this.mode = 'local';
+    this.DB = loadLocal();
+  },
+
+  async listThreads(board){
+    if(this.mode==='server'){
+      const r = await fetch(`api.php?action=threads&board=${encodeURIComponent(board)}`);
+      const j = await r.json();
+      return j.ok ? j.threads : [];
+    }
+    return this.DB[board] || [];
+  },
+
+  async getThread(board,id){
+    if(this.mode==='server'){
+      const r = await fetch(`api.php?action=thread&board=${encodeURIComponent(board)}&id=${id}`);
+      const j = await r.json();
+      return j.ok ? j.thread : null;
+    }
+    return (this.DB[board]||[]).find(t=>t.id===id) || null;
+  },
+
+  async post(formData){
+    if(this.mode==='server'){
+      const r = await fetch('api.php?action=post',{method:'POST',body:formData});
+      return await r.json();
+    }
+    return null; // local path handled in caller
+  },
+
+  async delete(board,no,pwd){
+    if(this.mode==='server'){
+      const fd = new FormData();
+      fd.append('board',board); fd.append('no',no); fd.append('pwd',pwd);
+      const r = await fetch('api.php?action=delete',{method:'POST',body:fd});
+      return await r.json();
+    }
+    return null;
+  },
+
+  async adminList(pwd){
+    const fd = new FormData(); fd.append('pwd',pwd);
+    const r = await fetch('api.php?action=admin_list',{method:'POST',body:fd});
+    return await r.json();
+  },
+
+  async adminDelete(board,no,pwd){
+    const fd = new FormData();
+    fd.append('board',board); fd.append('no',no); fd.append('pwd',pwd);
+    const r = await fetch('api.php?action=admin_delete',{method:'POST',body:fd});
+    return await r.json();
+  },
+
+  saveLocal(){ persistLocal(this.DB); }
+};
+
+/* localStorage fallback */
+const KEY='desichan_v1';
+function loadLocal(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw){ const p = JSON.parse(raw); if(p && typeof p==='object') return p; }
+  }catch(e){}
+  const fresh = seedLocal();
+  persistLocal(fresh);
+  return fresh;
+}
+function persistLocal(db){
+  try{ localStorage.setItem(KEY, JSON.stringify(db)); }catch(e){}
+}
+
+/* =========================================================
+   SEED (local mode only)
+   ========================================================= */
+function seedLocal(){
+  const N=Date.now(),H=3600000,D=86400000;
+  const db={}; BOARDS.forEach(b=>db[b.id]=[]);
+  db.desi=[
+    {id:840001,subject:'Welcome to DesiChan — read this first',name:'Gupt',date:N-6*D,posterId:'AAA11111',
+     comment:"Namaste aur swagat 🙏\n\n>be civil\n>no doxxing, no communal bait\n>lurk more",
+     replies:[
+       {id:840002,name:'Gupt',date:N-6*D+H,posterId:'BBB22222',comment:'first 🪔'},
+       {id:840003,name:'Gupt',date:N-6*D+2*H,posterId:'CCC33333',comment:'>>840002\nclassic'}
+     ]}
+  ];
+  db.cricket=[{id:841001,subject:'IPL thread',name:'Gupt',date:N-3*D,posterId:'DDD44444',
+    comment:"One thread for the season.",replies:[
+      {id:841002,name:'Gupt',date:N-3*D+2*H,posterId:'EEE55555',comment:'impact player rule is a scam'}
+    ]}];
+  db.cinema=[{id:842001,subject:'Best Indian film of the last 10 years?',name:'Gupt',date:N-4*D,posterId:'FFF66666',
+    comment:"One film. Defend it.",replies:[
+      {id:842002,name:'Gupt',date:N-4*D+3*H,posterId:'GGG77777',comment:'Tumbbad. Not close.'}
+    ]}];
+  db.food=[{id:843001,subject:'Post your comfort food',name:'Gupt',date:N-2*D,posterId:'HHH88888',
+    comment:"Not the fancy stuff.",replies:[
+      {id:843002,name:'Gupt',date:N-2*D+H,posterId:'III99999',comment:'dal chawal with ghee'}
+    ]}];
+  db.tech=[{id:844001,subject:'What are you building right now?',name:'Gupt',date:N-3*D,posterId:'JJJ00000',
+    comment:"Side project, startup, script.",replies:[]}];
+  db.memes=[{id:845001,subject:'Post your finest shitpost',name:'Gupt',date:N-1*D,posterId:'KKK11111',
+    comment:"Quality over quantity.",replies:[]}];
+  db.padhai=[{id:846001,subject:'JEE / NEET / UPSC daily check-in',name:'Gupt',date:N-5*D,posterId:'LLL22222',
+    comment:"Post what you studied today.",replies:[]}];
+  db.music=[{id:847001,subject:'What are you listening to right now?',name:'Gupt',date:N-20*H,posterId:'MMM33333',
+    comment:"Drop a track.",replies:[]}];
+  db.charcha=[{id:848001,subject:'Rules for this board',name:'Gupt',date:N-7*D,posterId:'NNN44444',
+    comment:">no communal bait\n>no party propaganda",replies:[]}];
+  db.safar=[{id:849001,subject:'Best train journey in India?',name:'Gupt',date:N-2*D,posterId:'OOO55555',
+    comment:"Window seat, 3am, chai.",replies:[]}];
+  db.random=[{id:850001,subject:'First',name:'Gupt',date:N-4*D,posterId:'PPP66666',
+    comment:"Tradition demands it.",replies:[]}];
+  return db;
+}
+
+/* =========================================================
+   UTILITIES
+   ========================================================= */
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function fmtDate(ts){
+  const d=new Date(ts),p=n=>String(n).padStart(2,'0');
+  return `${p(d.getDate())}/${p(d.getMonth()+1)}/${String(d.getFullYear()).slice(2)}(${DAYS[d.getDay()]})${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+}
+function fmt(text){
+  return esc(text).split('\n').map(line=>{
+    line = line.replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+    line = line.replace(/&gt;&gt;(\d+)/g,'<a class="quotelink" href="#p$1" data-q="$1">&gt;&gt;$1</a>');
+    if(/^&gt;(?!&gt;\d)/.test(line)) line = '<span class="quote">'+line+'</span>';
+    return line;
+  }).join('\n');
+}
+function newId(){ return Math.floor(100000000 + Math.random()*899999999); }
+
+function posterId(){
+  const today = new Date().toISOString().slice(0,10);
+  let seed = localStorage.getItem('desichan_seed');
+  if(!seed){ seed = Math.random().toString(36).slice(2); localStorage.setItem('desichan_seed',seed); }
+  let h = 0; const s = seed+today;
+  for(let i=0;i<s.length;i++) h = ((h<<5)-h+s.charCodeAt(i))|0;
+  return Math.abs(h).toString(36).padStart(8,'0').slice(-8).toUpperCase();
+}
+
+async function hashPwd(pwd){
+  if(!pwd) return '*';
+  if(crypto.subtle){
+    const buf = new TextEncoder().encode(pwd);
+    const h = await crypto.subtle.digest('SHA-256',buf);
+    return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('').slice(2,10);
+  }
+  // fallback
+  let x = 0; for(let i=0;i<pwd.length;i++) x = ((x<<5)-x+pwd.charCodeAt(i))|0;
+  return Math.abs(x).toString(16).padStart(8,'0').slice(0,8);
+}
+
+function checkFlood(){
+  const last = parseInt(localStorage.getItem('desichan_lastpost')||'0',10);
+  const now = Date.now();
+  if(now - last < RENZOKU*1000){
+    return 'Wait ' + Math.ceil((RENZOKU*1000-(now-last))/1000) + 's before posting again.';
+  }
+  return null;
+}
+function markPost(){ localStorage.setItem('desichan_lastpost', Date.now()); }
+
+function makeThumb(dataUrl, maxW=250, maxH=250){
+  return new Promise(resolve=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const ratio = Math.min(maxW/img.width, maxH/img.height, 1);
+      const w = Math.max(1, Math.round(img.width*ratio));
+      const h = Math.max(1, Math.round(img.height*ratio));
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#fff'; ctx.fillRect(0,0,w,h);
+      ctx.drawImage(img,0,0,w,h);
+      resolve({dataUrl, thumbUrl: c.toDataURL('image/jpeg',0.75), ow:img.width, oh:img.height, w, h});
+    };
+    img.onerror = ()=>resolve(null);
+    img.src = dataUrl;
+  });
+}
+
+function readFileInput(file){
+  return new Promise(resolve=>{
+    if(!file) return resolve(null);
+    if(!/^image\//.test(file.type)){ alert('Only image files allowed.'); return resolve(null); }
+    if(file.size > MAX_KB*1024){ alert('File too large. Max '+MAX_KB+' KB.'); return resolve(null); }
+    const r = new FileReader();
+    r.onload = ()=>resolve({name:file.name, dataUrl:r.result});
+    r.onerror = ()=>resolve(null);
+    r.readAsDataURL(file);
+  });
+}
+
+/* =========================================================
+   RENDER: nav
+   ========================================================= */
+function renderBoardNav(){
+  document.getElementById('boardbar').innerHTML =
+    '<a href="#/">[ Home ]</a> ' +
+    BOARDS.map(b=>`<a href="#/board/${b.id}">[ /${b.id}/ ]</a>`).join(' ');
+}
+
+/* =========================================================
+   RENDER: home
+   ========================================================= */
+async function renderHome(){
+  const grouped = {}; CATEGORIES.forEach(c=>grouped[c]=[]);
+  BOARDS.forEach(b=>{ if(!grouped[b.cat]) grouped[b.cat]=[]; grouped[b.cat].push(b); });
+
+  // Fetch live stats per board (server) or use DB (local)
+  const boardStats = {};
+  let totalThreads = 0, totalPosts = 0;
+  for(const b of BOARDS){
+    let threads = [];
+    if(Store.mode==='server'){
+      try{
+        const r = await fetch(`api.php?action=threads&board=${b.id}`);
+        const j = await r.json();
+        if(j.ok) threads = j.threads;
+      }catch(e){}
+    } else {
+      threads = Store.DB[b.id] || [];
+    }
+    const posts = threads.reduce((n,t)=>n+1+(t.replies?.length||0),0);
+    boardStats[b.id] = {t:threads.length, p:posts};
+    totalThreads += threads.length;
+    totalPosts += posts;
+  }
+
+  const catHTML = CATEGORIES.map(cat=>{
+    const boards = grouped[cat]||[];
+    if(!boards.length) return '';
+    const items = boards.map(b=>{
+      const s = boardStats[b.id]||{t:0,p:0};
+      return `<li>
+        <a href="#/board/${b.id}">/${b.id}/</a>
+        — <b>${esc(b.name)}</b>
+        <span class="cdesc">${esc(b.desc)}</span>
+        <span class="cdesc">(${s.t}t / ${s.p}p)</span>
+      </li>`;
+    }).join('');
+    return `<div class="cat"><h2>${esc(cat)}</h2><ul>${items}</ul></div>`;
+  }).join('');
+
+  document.getElementById('app').innerHTML = `
+    <div class="home">
+      <h1>DesiChan</h1>
+      <p class="home-sub">भारतीय इमेजबोर्ड · Indian Imageboard</p>
+      <p class="home-tagline">A simple imageboard for the Indian community.<br>
+      No accounts. No algorithm. No likes. Just threads.</p>
+      <hr>
+      <div class="home-stats">
+        ${BOARDS.length} boards · ${totalThreads} threads · ${totalPosts} posts
+        · mode: <b>${Store.mode}</b>
+      </div>
+      ${catHTML}
+      <hr>
+      <div class="home-nav">
+        [ <a href="#/">Home</a> ]
+        [ <a href="#/board/desi">/desi/</a> ]
+        [ <a href="#/board/random">/random/</a> ]
+        [ <a href="#/admin">/admin/</a> ]
+      </div>
+    </div>
+  `;
+}
+
+/* =========================================================
+   RENDER: post
+   ========================================================= */
+function postHTML(p, opts){
+  opts = opts || {};
+  const isOp = !!opts.op;
+  const cls = 'post ' + (isOp ? 'op' : 'reply');
+  const subject = (isOp && p.subject) ? `<div class="subject">${esc(p.subject)}</div>` : '';
+  let fileHTML = '';
+  if(p.file){
+    const displaySrc = p.file.thumb || p.file.src;
+    const fullSrc = p.file.src;
+    fileHTML = `<div class="files">
+      <div class="fileinfo">File: <a href="${esc(fullSrc)}" target="_blank" rel="noopener">${esc(p.file.name||'image')}</a>${p.file.size?' — '+(Math.round(p.file.size/1024))+' KB':''}</div>
+      <a href="${esc(fullSrc)}" target="_blank" rel="noopener"><img class="attach" src="${esc(displaySrc)}" alt="attachment"></a>
+    </div>`;
+  }
+  const qbtn = (!isOp && opts.boardId && opts.threadId)
+    ? `<a class="qbtn" href="#p${p.id}" data-quote="${p.id}" title="Quote">&#9654;</a>` : '';
+  const delBtn = `<a class="delbtn" href="#" data-del="${p.id}" data-board="${opts.boardId||''}" title="Delete">[del]</a>`;
+  const pid = p.posterId ? `<span class="pid">ID:${esc(p.posterId)}</span>` : '';
+
+  return `<div class="${cls}" id="p${p.id}">
+    ${subject}
+    <div class="postinfo">
+      <span class="name">${esc(p.name||'Gupt')}</span>
+      <span class="date">${fmtDate(p.date)}</span>
+      <span class="pnum"><a href="#p${p.id}">No.${p.id}</a></span>
+      ${pid}${qbtn} ${delBtn}
+    </div>
+    ${fileHTML}
+    <div class="body">${fmt(p.comment)}</div>
+    <br class="clear">
+  </div>`;
+}
+
+/* =========================================================
+   RENDER: form
+   ========================================================= */
+function formHTML(isReply, forceSage){
+  const id = isReply ? 'replyform' : 'newthread';
+  const btn = isReply ? 'Post Reply' : 'Post Thread';
+  const subjRow = isReply ? '' :
+    `<tr><th>Subject</th><td><input type="text" name="subject" maxlength="100"></td></tr>`;
+  const sageNote = forceSage ? `<span class="hint" style="color:#CC1105">(max replies reached — sage forced)</span>` : '';
+  return `<form id="${id}">
+    <table>
+      <tr><th>Name</th><td><input type="text" name="name" maxlength="40" placeholder="Gupt"></td></tr>
+      <tr><th>Email</th><td><input type="text" name="email" maxlength="60" placeholder="sage (optional)" ${forceSage?'value="sage" readonly':''}> ${sageNote}</td></tr>
+      ${subjRow}
+      <tr><th>Comment</th><td><textarea name="comment" required></textarea></td></tr>
+      <tr><th>File</th><td><input type="file" name="file" accept="image/*"> <span class="hint">Max ${MAX_KB} KB</span></td></tr>
+      <tr><th>Del key</th><td><input type="password" name="pwd" maxlength="32" placeholder="password to delete later (optional)"> <span class="hint">8+ chars recommended</span></td></tr>
+      <tr><th></th><td><input type="submit" value="${btn}"></td></tr>
+    </table>
+  </form>`;
+}
+
+/* =========================================================
+   RENDER: board page
+   ========================================================= */
+async function renderBoard(boardId){
+  const board = BOARDS.find(b=>b.id===boardId);
+  if(!board){ renderHome(); return; }
+
+  let threads = [];
+  try{ threads = await Store.listThreads(boardId); }catch(e){ threads = []; }
+
+  const threadHTML = threads.length === 0
+    ? `<div class="empty">No threads on /${boardId}/ yet. Be the first — use the form above.</div>`
+    : threads.map(t=>{
+        const shown = (t.replies||[]).slice(-3);
+        const hidden = (t.replies||[]).length - shown.length;
+        return `<div class="thread">
+          ${postHTML(t,{op:true, boardId})}
+          ${hidden>0?`<div class="omitted">${hidden} earlier repl${hidden===1?'y':'ies'} omitted.</div>`:''}
+          ${shown.map(r=>postHTML(r,{boardId,threadId:t.id})).join('')}
+          <div class="threadfoot">
+            <a href="#/thread/${boardId}/${t.id}">View thread (${1+(t.replies?.length||0)} posts)</a>
+            &nbsp;·&nbsp; <a href="#/thread/${boardId}/${t.id}">Reply</a>
+          </div>
+        </div>`;
+      }).join('');
+
+  const notice = Store.mode==='local'
+    ? `<div class="notice"><b>Local mode</b> — posts are saved in your browser only. Add <code>api.php</code> alongside this file to enable server mode for shared boards.</div>`
+    : '';
+
+  document.getElementById('app').innerHTML = `
+    <div class="boardhead">
+      <div class="crumb"><a href="#/">Home</a> › /${boardId}/</div>
+      <h1>/${boardId}/ — ${esc(board.name)}</h1>
+      <p>${esc(board.desc)} · ${threads.length} thread${threads.length===1?'':'s'}</p>
+    </div>
+    ${notice}
+    <hr>
+    ${formHTML(false,false)}
+    <hr>
+    ${threadHTML}
+    <div style="text-align:center;margin-top:14px;">
+      <div class="pages">
+        [ <a href="#/">Index</a> ]
+        [ <a href="#/board/${boardId}">Refresh</a> ]
+        [ <a href="#/board/${boardId}">Bottom</a> ]
+      </div>
+    </div>
+  `;
+
+  const form = document.getElementById('newthread');
+  form.addEventListener('submit', async e=>{ e.preventDefault(); await submitPost(form, boardId, 0); });
+}
+
+/* =========================================================
+   RENDER: thread page
+   ========================================================= */
+async function renderThread(boardId, threadId){
+  const board = BOARDS.find(b=>b.id===boardId);
+  const thread = await Store.getThread(boardId, threadId);
+  if(!board || !thread){ renderHome(); return; }
+
+  const replies = (thread.replies||[]).map(r=>postHTML(r,{boardId,threadId})).join('');
+  const forceSage = (thread.replies||[]).length >= MAX_RES;
+
+  document.getElementById('app').innerHTML = `
+    <div class="boardhead">
+      <div class="crumb"><a href="#/">Home</a> › <a href="#/board/${boardId}">/${boardId}/</a> › thread</div>
+      <h1>/${boardId}/ — ${esc(board.name)}</h1>
+      <p>${1+(thread.replies?.length||0)} posts in this thread</p>
+    </div>
+    <hr>
+    <div class="thread">
+      ${postHTML(thread,{op:true, boardId})}
+      ${replies}
+    </div>
+    <hr>
+    ${formHTML(true, forceSage)}
+    <div style="text-align:center;margin-top:14px;">
+      <div class="pages">
+        [ <a href="#/board/${boardId}">← Back to /${boardId}/</a> ]
+      </div>
+    </div>
+  `;
+
+  const form = document.getElementById('replyform');
+  form.addEventListener('submit', async e=>{ e.preventDefault(); await submitPost(form, boardId, threadId); });
+}
+
+/* =========================================================
+   RENDER: admin
+   ========================================================= */
+async function renderAdmin(){
+  if(Store.mode!=='server'){
+    document.getElementById('app').innerHTML = `
+      <div class="boardhead"><h1>/admin/</h1><p>Available in server mode only.</p></div>
+      <div class="empty">Add <code>api.php</code> to enable the admin panel.</div>`;
+    return;
+  }
+  const pwd = sessionStorage.getItem('desichan_admin_pwd') || '';
+  if(!pwd){
+    document.getElementById('app').innerHTML = `
+      <div class="boardhead"><h1>/admin/</h1><p>Enter admin password</p></div>
+      <div style="text-align:center;padding:20px">
+        <input type="password" id="adminpwd" placeholder="password" style="width:200px">
+        <button id="adminlogin">Login</button>
+      </div>`;
+    document.getElementById('adminlogin').addEventListener('click',()=>{
+      const v = document.getElementById('adminpwd').value;
+      if(v){ sessionStorage.setItem('desichan_admin_pwd',v); renderAdmin(); }
+    });
+    return;
+  }
+
+  let posts = [];
+  try{
+    const j = await Store.adminList(pwd);
+    if(!j.ok){ sessionStorage.removeItem('desichan_admin_pwd'); renderAdmin(); return; }
+    posts = j.posts;
+  }catch(e){ posts = []; }
+
+  const totalSize = posts.reduce((n,p)=>n+(p.size||0),0);
+  const rows = posts.map(p=>`
+    <tr>
+      <td>/${p.board}/</td>
+      <td>${p.no}</td>
+      <td>${esc(p.time||'')}</td>
+      <td>${esc(p.name||'')}</td>
+      <td>${esc(p.sub||'')}</td>
+      <td>${esc((p.com||'').slice(0,60))}</td>
+      <td>${esc(p.host||'')}</td>
+      <td>${p.size?Math.round(p.size/1024)+' KB':''}</td>
+      <td><button data-admindel="${p.board}|${p.no}" style="font-size:9pt;padding:1px 6px">del</button></td>
+    </tr>`).join('');
+
+  document.getElementById('app').innerHTML = `
+    <div class="boardhead"><h1>/admin/</h1><p>${posts.length} posts · ${Math.round(totalSize/1024)} KB total</p></div>
+    <div style="text-align:right;margin-bottom:6px">
+      <button id="adminlogout" style="font-size:9pt">Logout</button>
+    </div>
+    <table class="admin-table">
+      <thead><tr><th>Board</th><th>No</th><th>Time</th><th>Name</th><th>Sub</th><th>Comment</th><th>Host</th><th>Size</th><th></th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div style="text-align:center;margin-top:14px;">
+      <div class="pages">[ <a href="#/">Index</a> ]</div>
+    </div>
+  `;
+
+  document.getElementById('adminlogout').addEventListener('click',()=>{
+    sessionStorage.removeItem('desichan_admin_pwd'); renderAdmin();
+  });
+
+  document.querySelectorAll('[data-admindel]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const [b,no] = btn.dataset.admindel.split('|');
+      if(!confirm(`Delete /${b}/ #${no}?`)) return;
+      const j = await Store.adminDelete(b, parseInt(no,10), pwd);
+      if(j.ok) renderAdmin(); else alert(j.error||'failed');
+    });
+  });
+}
+
+/* =========================================================
+   SUBMIT POST (shared by board + thread forms)
+   ========================================================= */
+async function submitPost(form, boardId, resto){
+  const flood = checkFlood();
+  if(flood){ alert(flood); return; }
+
+  const name = (form.name.value||'').trim() || 'Gupt';
+  const email = (form.email?.value||'').trim();
+  const subject = form.subject ? form.subject.value.trim() : '';
+  const comment = form.comment.value.trim();
+  const pwd = form.pwd?.value || '';
+
+  if(!comment){ alert('Comment cannot be empty.'); return; }
+  if(comment.length > 4000){ alert('Comment too long.'); return; }
+
+  const fileInput = form.querySelector('input[type=file]');
+  const file = fileInput?.files?.[0] || null;
+
+  if(Store.mode==='server'){
+    const fd = new FormData();
+    fd.append('action','post');
+    fd.append('board',boardId);
+    fd.append('resto',String(resto));
+    fd.append('name',name);
+    fd.append('email',email);
+    fd.append('subject',subject);
+    fd.append('comment',comment);
+    fd.append('pwd',pwd);
+    if(file) fd.append('upfile',file);
+    try{
+      const j = await Store.post(fd);
+      if(!j.ok){ alert(j.error||'Post failed'); return; }
+      markPost();
+      pendingScroll = j.no;
+      if(resto) route();
+      else { location.hash = `#/thread/${boardId}/${j.no}`; route(); }
+    }catch(e){ alert('Network error: '+e.message); }
+    return;
+  }
+
+  // ---- local mode ----
+  let fileData = null;
+  if(file){
+    const rf = await readFileInput(file);
+    if(!rf){ return; }
+    const thumb = await makeThumb(rf.dataUrl);
+    fileData = {
+      name: rf.name,
+      src: rf.dataUrl,
+      thumb: thumb ? thumb.thumbUrl : rf.dataUrl,
+      w: thumb?.w, h: thumb?.h, ow: thumb?.ow, oh: thumb?.oh,
+      size: file.size
+    };
+  }
+
+  const passHash = await hashPwd(pwd);
+  const pid = posterId();
+  const now = Date.now();
+
+  const board = Store.DB[boardId];
+  if(!board){ alert('Board not found'); return; }
+
+  if(resto){
+    const t = board.find(x=>x.id===resto);
+    if(!t){ alert('Thread not found'); return; }
+    const reply = {id:newId(), name, date:now, comment, file:fileData, posterId:pid, hasPassword:passHash!=='*', passHash};
+    t.replies.push(reply);
+    if(email.toLowerCase()!=='sage'){
+      const i = board.indexOf(t);
+      if(i>0){ board.splice(i,1); board.unshift(t); }
+    }
+    Store.saveLocal();
+    markPost();
+    pendingScroll = reply.id;
+    route();
+  } else {
+    const thread = {
+      id:newId(), subject:subject||'No subject', name, date:now,
+      comment, file:fileData, posterId:pid, hasPassword:passHash!=='*', passHash, replies:[]
+    };
+    board.unshift(thread);
+    Store.saveLocal();
+    markPost();
+    pendingScroll = thread.id;
+    location.hash = `#/thread/${boardId}/${thread.id}`;
+    route();
+  }
+}
+
+/* =========================================================
+   DELETE POST
+   ========================================================= */
+async function deletePost(boardId, no){
+  const pwd = prompt('Enter deletion password:');
+  if(!pwd) return;
+
+  if(Store.mode==='server'){
+    const j = await Store.delete(boardId, no, pwd);
+    if(!j.ok){ alert(j.error||'failed'); return; }
+    route();
+    return;
+  }
+
+  // local mode
+  const hash = await hashPwd(pwd);
+  const board = Store.DB[boardId];
+  if(!board){ alert('Board not found'); return; }
+
+  // search in thread OPs
+  for(let i=0;i<board.length;i++){
+    const t = board[i];
+    if(t.id===no){
+      if(t.passHash === hash){
+        board.splice(i,1);
+        Store.saveLocal();
+        route();
+        return;
+      }
+    }
+    // search replies
+    for(let k=0;k<t.replies.length;k++){
+      const r = t.replies[k];
+      if(r.id===no && r.passHash === hash){
+        t.replies.splice(k,1);
+        Store.saveLocal();
+        route();
+        return;
+      }
+    }
+  }
+  alert('Post not found or wrong password.');
+}
+
+/* =========================================================
+   ROUTER
+   ========================================================= */
+let pendingScroll = null;
+
+async function route(){
+  const hash = location.hash.slice(1) || '/';
+  const parts = hash.split('/').filter(Boolean);
+
+  try{
+    if(parts.length===0){ await renderHome(); }
+    else if(parts[0]==='board' && parts[1]){ await renderBoard(parts[1]); }
+    else if(parts[0]==='thread' && parts[1] && parts[2]){ await renderThread(parts[1], Number(parts[2])); }
+    else if(parts[0]==='admin'){ await renderAdmin(); }
+    else { await renderHome(); }
+  }catch(e){
+    console.error(e);
+    document.getElementById('app').innerHTML = `<div class="empty">Error: ${esc(e.message)}</div>`;
+  }
+
+  if(pendingScroll){
+    const el = document.getElementById('p'+pendingScroll);
+    if(el){
+      el.scrollIntoView({block:'center',behavior:'smooth'});
+      el.classList.add('highlighted');
+      setTimeout(()=>el.classList.remove('highlighted'),1600);
+    }
+    pendingScroll = null;
+  } else {
+    window.scrollTo(0,0);
+  }
+}
+
+/* =========================================================
+   GLOBAL EVENTS
+   ========================================================= */
+document.addEventListener('click', e=>{
+  const q = e.target.closest('.quotelink');
+  if(q){
+    const el = document.getElementById('p'+q.dataset.q);
+    if(el){
+      e.preventDefault();
+      el.scrollIntoView({block:'center',behavior:'smooth'});
+      el.classList.add('highlighted');
+      setTimeout(()=>el.classList.remove('highlighted'),1600);
+    }
+    return;
+  }
+  const qb = e.target.closest('.qbtn');
+  if(qb){
+    e.preventDefault();
+    const ta = document.querySelector('#replyform textarea[name=comment]');
+    if(ta){
+      const id = qb.dataset.quote;
+      ta.value += (ta.value && !ta.value.endsWith('\n') ? '\n' : '') + '>>'+id+'\n';
+      ta.focus();
+      ta.scrollIntoView({block:'center',behavior:'smooth'});
+    }
+    return;
+  }
+  const db = e.target.closest('.delbtn');
+  if(db){
+    e.preventDefault();
+    deletePost(db.dataset.board, parseInt(db.dataset.del,10));
+    return;
+  }
+});
+
+window.addEventListener('hashchange', route);
+
+/* =========================================================
+   BOOT
+   ========================================================= */
+(async ()=>{
+  await Store.init();
+  document.getElementById('modeinfo').innerHTML =
+    Store.mode==='server'
+      ? 'Server mode — posts are shared. Backend: api.php'
+      : 'Local mode — posts are stored in your browser. Add api.php for shared boards.';
+  renderBoardNav();
+  route();
+})();
+</script>
+</body>
+</html>
